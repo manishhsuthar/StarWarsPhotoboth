@@ -265,7 +265,16 @@ class PhotoBooth {
 
         this.canvas.width = videoWidth;
         this.canvas.height = videoHeight;
-        context.drawImage(this.video, 0, 0, videoWidth, videoHeight);
+        if (this.isMirrored) {
+            // Mirror the captured frame so saved photos match Mirror Mode.
+            context.save();
+            context.translate(videoWidth, 0);
+            context.scale(-1, 1);
+            context.drawImage(this.video, 0, 0, videoWidth, videoHeight);
+            context.restore();
+        } else {
+            context.drawImage(this.video, 0, 0, videoWidth, videoHeight);
+        }
 
         this.capturedImage = this.canvas.toDataURL('image/jpeg', 0.8);
         this.showPreview();
